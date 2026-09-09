@@ -18,6 +18,17 @@
 
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+
+    /* ── Particle canvas — sits only inside the hero section ──────── */
+    #portfolio-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
     body {
       margin: 0;
       color: var(--ink);
@@ -52,16 +63,7 @@
       position: relative;
       overflow: hidden;
       padding: 88px 0 72px;
-      background-color: #eaf2ff;
-      background-image:
-        radial-gradient(circle at 82% 18%, rgba(29,78,216,.22) 0 2px, transparent 3px),
-        radial-gradient(circle at 18% 82%, rgba(22,163,74,.15) 0 2px, transparent 3px),
-        linear-gradient(135deg, transparent 0 48%, rgba(29,78,216,.09) 49% 49.5%, transparent 50%),
-        linear-gradient(45deg, transparent 0 48%, rgba(22,163,74,.08) 49% 49.5%, transparent 50%),
-        linear-gradient(rgba(29,78,216,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(29,78,216,.06) 1px, transparent 1px),
-        linear-gradient(135deg, #e8f1ff 0%, #f8fbf8 68%);
-      background-size: 180px 180px, 260px 260px, 260px 260px, 32px 32px, 32px 32px, auto;
+      background-color: #0b1526;
     }
     .hero::after {
       content: "";
@@ -70,23 +72,23 @@
       height: 280px;
       right: -90px;
       top: -100px;
-      border: 1px solid rgba(29,78,216,.18);
+      border: 1px solid rgba(59,130,212,.18);
       border-radius: 50%;
-      box-shadow: 0 0 0 22px rgba(29,78,216,.04), 0 0 0 44px rgba(29,78,216,.035);
+      box-shadow: 0 0 0 22px rgba(59,130,212,.04), 0 0 0 44px rgba(59,130,212,.035);
       pointer-events: none;
     }
     .hero-grid { position: relative; z-index: 1; display: grid; grid-template-columns: 1.35fr .65fr; gap: 48px; align-items: center; }
-    .eyebrow { margin: 0 0 14px; color: var(--blue); font-size: .78rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
-    h1 { margin: 0; max-width: 760px; font-size: clamp(2.6rem, 7vw, 5.2rem); line-height: .98; letter-spacing: -.06em; }
-    .hero-summary { max-width: 700px; margin: 24px 0 0; color: #475467; font-size: 1.08rem; }
+    .eyebrow { margin: 0 0 14px; color: #3b82d4; font-size: .78rem; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    h1 { margin: 0; max-width: 760px; font-size: clamp(2.6rem, 7vw, 5.2rem); line-height: .98; letter-spacing: -.06em; color: #e2e8f4; }
+    .hero-summary { max-width: 700px; margin: 24px 0 0; color: #8fa3c0; font-size: 1.08rem; }
     .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
     .button { display: inline-block; padding: 12px 18px; border-radius: 9px; font-weight: 750; text-decoration: none; border: 1px solid var(--blue); }
     .button.primary { background: var(--blue); color: white; }
     .button.secondary { color: var(--blue-dark); background: white; }
-    .contact-card { padding: 26px; border: 1px solid rgba(255,255,255,.82); border-radius: 18px; background: rgba(255,255,255,.52); box-shadow: 0 18px 45px rgba(23,32,51,.08); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .contact-card { padding: 26px; border: 1px solid rgba(59,130,212,.3); border-radius: 18px; background: rgba(10,18,36,.72); color: #e2e8f4; box-shadow: 0 18px 45px rgba(0,0,0,.4); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
     .contact-card h2 { margin: 0 0 18px; font-size: 1.05rem; }
-    .contact-item { margin: 14px 0; color: var(--muted); font-size: .94rem; }
-    .contact-item strong { display: block; color: var(--ink); font-size: .78rem; text-transform: uppercase; letter-spacing: .09em; }
+    .contact-item { margin: 14px 0; color: #8fa3c0; font-size: .94rem; }
+    .contact-item strong { display: block; color: #c8d8ef; font-size: .78rem; text-transform: uppercase; letter-spacing: .09em; }
 
     section { padding: 76px 0; }
     .section-heading { display: flex; justify-content: space-between; align-items: end; gap: 20px; margin-bottom: 28px; }
@@ -99,7 +101,47 @@
     .about-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 36px; }
     .about-copy { margin: 0; color: #475467; font-size: 1.05rem; }
     .skills { display: flex; flex-wrap: wrap; gap: 10px; align-content: start; }
-    .tag { padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; background: var(--surface); color: var(--blue-dark); font-weight: 700; font-size: .9rem; }
+    .tag {
+      all: unset;
+      display: inline-block;
+      padding: 9px 13px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--blue-dark);
+      font-weight: 700;
+      font-size: .9rem;
+      cursor: pointer;
+      transition: background .15s, border-color .15s, transform .1s;
+    }
+    .tag:hover { background: var(--pale); border-color: var(--blue); transform: translateY(-1px); }
+    .tag:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+
+    /* Skill popup modal */
+    .skill-overlay {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(23,32,51,.55); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center;
+    }
+    .skill-overlay.open { display: flex; }
+    .skill-modal {
+      position: relative; background: #fff; border-radius: 20px;
+      padding: 36px 32px 28px; max-width: 380px; width: calc(100% - 40px);
+      box-shadow: 0 24px 60px rgba(23,32,51,.22);
+    }
+    .skill-modal-title {
+      font-weight: 800; font-size: 1.1rem; color: var(--blue-dark);
+      margin: 0 0 12px; padding-right: 24px;
+    }
+    .skill-modal-desc {
+      color: #475467; font-size: .95rem; line-height: 1.6; margin: 0;
+    }
+    .skill-modal-close {
+      position: absolute; top: 14px; right: 16px;
+      background: none; border: none; cursor: pointer;
+      font-size: 1.4rem; color: var(--muted); line-height: 1; padding: 0;
+    }
+    .skill-modal-close:hover { color: var(--ink); }
 
     .timeline { position: relative; display: grid; gap: 24px; }
     .timeline::before { content: ""; position: absolute; left: 9px; top: 12px; bottom: 12px; width: 2px; background: #cfe0ff; }
@@ -151,14 +193,14 @@
     .detail { padding: 22px; border-radius: 14px; background: var(--ink); color: white; }
     .detail strong { display: block; margin-bottom: 8px; color: #9ec1ff; font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; }
     .detail p { margin: 0; color: #d4dbea; }
-    footer { padding: 30px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; }
+    footer { padding: 30px 0; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; text-align: center; }
 
     @media (max-width: 780px) {
       .container { width: min(100% - 28px, 680px); }
       .nav-inner, .section-heading { align-items: start; flex-direction: column; }
       .nav-inner { padding: 12px 0; }
       .nav-links { width: 100%; justify-content: space-between; gap: 10px; font-size: .84rem; }
-      .hero { padding: 62px 0 52px; background-size: 140px 140px, 190px 190px, 190px 190px, 24px 24px, 24px 24px, auto; }
+      .hero { padding: 62px 0 52px; }
       .hero::after { width: 190px; height: 190px; right: -80px; top: -70px; }
       .welcome-banner { padding: 30px 24px; }
       .hero-grid, .about-grid, .cards, .details { grid-template-columns: 1fr; }
@@ -192,6 +234,15 @@
 </head>
 <body>
 
+  <!-- Skill popup modal -->
+  <div class="skill-overlay" id="skillOverlay" role="dialog" aria-modal="true" aria-labelledby="skillModalTitle">
+    <div class="skill-modal">
+      <button class="skill-modal-close" id="skillClose" aria-label="Close">&times;</button>
+      <h3 class="skill-modal-title" id="skillModalTitle"></h3>
+      <p class="skill-modal-desc" id="skillModalDesc"></p>
+    </div>
+  </div>
+
   <!-- Badge popup modal -->
   <div class="badge-overlay" id="badgeOverlay" role="dialog" aria-modal="true" aria-labelledby="badgeModalName">
     <div class="badge-modal">
@@ -220,6 +271,8 @@
 
   <main id="top">
     <section class="hero">
+      <!-- Particle network canvas — confined to the hero section -->
+      <canvas id="portfolio-canvas" aria-hidden="true"></canvas>
       <div class="container hero-grid">
         <div>
           <p class="eyebrow">Reporting Analyst · IT Support · Accounting</p>
@@ -249,14 +302,14 @@
         <div class="about-grid">
           <p class="about-copy">Accounting professional with 4 years of experience managing five branches, handling daily sales recording, bank reconciliation, payroll, rental payments, bill processing, and monthly profit and loss reporting. Additionally, I have nearly 13 years of IT support experience, specializing in hardware and software maintenance and troubleshooting.</p>
           <div class="skills" aria-label="Key skills">
-            <span class="tag">IT hardware support</span>
-            <span class="tag">IT software support</span>
-            <span class="tag">Basic accounting</span>
-            <span class="tag">Reporting and analysis</span>
-            <span class="tag">Access governance</span>
-            <span class="tag">Claims validation</span>
-            <span class="tag">POS systems</span>
-            <span class="tag">Asset tracking</span>
+            <button class="tag skill-tag" data-title="IT hardware support" data-desc="Nearly 13 years of hands-on experience diagnosing and repairing desktop computers, laptops, printers, and peripherals. Skilled in component replacement, hardware upgrades, cable management, and preventive maintenance across multi-branch environments.">IT hardware support</button>
+            <button class="tag skill-tag" data-title="IT software support" data-desc="Proficient in installing, configuring, and troubleshooting operating systems (Windows), productivity suites, POS software, and enterprise applications. Experience maintaining software updates and user access across 17 branches.">IT software support</button>
+            <button class="tag skill-tag" data-title="Basic accounting" data-desc="4 years managing accounting operations for five branches — including daily sales recording, bank reconciliation, payroll processing, rental and bill payments, and monthly profit and loss reporting using standard accounting practices.">Basic accounting</button>
+            <button class="tag skill-tag" data-title="Reporting and analysis" data-desc="Currently working as a Reporting Analyst at IBM, monitoring and reporting on access request activities. Builds structured reports for governance, risk, and compliance requirements, and supports decision-making through data analysis.">Reporting and analysis</button>
+            <button class="tag skill-tag" data-title="Access governance" data-desc="Specialized in Access Request Governance at IBM GBS Ops — overseeing access request lifecycle management, compliance tracking, and reporting across organizational systems. Ensures adherence to GRC standards.">Access governance</button>
+            <button class="tag skill-tag" data-title="Claims validation" data-desc="Experienced as both a Global Claims Coordinator (GCC) and Claims Clearing Analyst (CCA) at IBM. Performed claims revalidation, documentation review, fund requests, and portal-based claim clearing.">Claims validation</button>
+            <button class="tag skill-tag" data-title="POS systems" data-desc="Managed and supported two POS platforms — Zensoft (17 branches) and Micromax Total Business Solutions (TBS). Responsibilities included system setup, daily operation support, troubleshooting, and user training.">POS systems</button>
+            <button class="tag skill-tag" data-title="Asset tracking" data-desc="Maintained accurate records of computer hardware and software assets across multiple branches and educational institutions. Monitored asset status, tracked inventories, and coordinated timely updates and replacements.">Asset tracking</button>
           </div>
         </div>
       </div>
@@ -324,6 +377,55 @@
 
   <footer><div class="container">© 2026 Anthony Padilla Locenario · Professional portfolio</div></footer>
 
+  <!-- Particle network background (ported from Access Dashboard login screen) -->
+  <script>
+    (function () {
+      var canvas = document.getElementById('portfolio-canvas');
+      if (!canvas) return;
+      var ctx = canvas.getContext('2d');
+      var mouse = { x: -9999, y: -9999 };
+      document.addEventListener('mousemove', function (e) { mouse.x = e.clientX; mouse.y = e.clientY; });
+      document.addEventListener('mouseleave', function () { mouse.x = -9999; mouse.y = -9999; });
+      var PALETTE = ['#3b82d4', '#1a6abf', '#7c5cd8', '#0891b2', '#2563eb'];
+      var NODE_COUNT = 72, CONNECT_DIST = 140, REPEL_DIST = 110, REPEL_FORCE = 0.018;
+      var W, H, nodes = [];
+      function resize() { W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+      function rand(min, max) { return Math.random() * (max - min) + min; }
+      function makeNode() { return { x: rand(0, W), y: rand(0, H), vx: rand(-0.35, 0.35), vy: rand(-0.35, 0.35), r: rand(2.2, 4.2), color: PALETTE[Math.floor(Math.random() * PALETTE.length)], alpha: rand(0.5, 0.9) }; }
+      function init() { resize(); nodes = []; for (var i = 0; i < NODE_COUNT; i++) nodes.push(makeNode()); }
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        for (var i = 0; i < nodes.length; i++) for (var j = i + 1; j < nodes.length; j++) {
+          var dx = nodes[j].x - nodes[i].x, dy = nodes[j].y - nodes[i].y;
+          var dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < CONNECT_DIST) { var t = 1 - dist / CONNECT_DIST; ctx.beginPath(); ctx.moveTo(nodes[i].x, nodes[i].y); ctx.lineTo(nodes[j].x, nodes[j].y); ctx.strokeStyle = 'rgba(59,130,212,' + (t * 0.28) + ')'; ctx.lineWidth = t * 1.2; ctx.stroke(); }
+        }
+        for (var ni = 0; ni < nodes.length; ni++) {
+          var n = nodes[ni];
+          var hex = n.color.replace('#', ''); var r = parseInt(hex.slice(0, 2), 16), g = parseInt(hex.slice(2, 4), 16), b = parseInt(hex.slice(4, 6), 16);
+          ctx.beginPath(); ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2); ctx.fillStyle = 'rgba(' + r + ',' + g + ',' + b + ',' + n.alpha + ')'; ctx.fill();
+          var grd = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r * 3.5); grd.addColorStop(0, 'rgba(' + r + ',' + g + ',' + b + ',' + (n.alpha * 0.3) + ')'); grd.addColorStop(1, 'rgba(' + r + ',' + g + ',' + b + ',0)');
+          ctx.beginPath(); ctx.arc(n.x, n.y, n.r * 3.5, 0, Math.PI * 2); ctx.fillStyle = grd; ctx.fill();
+        }
+      }
+      function update() {
+        for (var ni = 0; ni < nodes.length; ni++) {
+          var n = nodes[ni];
+          var mdx = n.x - mouse.x, mdy = n.y - mouse.y, mdist = Math.sqrt(mdx * mdx + mdy * mdy);
+          if (mdist < REPEL_DIST && mdist > 0) { var force = ((REPEL_DIST - mdist) / REPEL_DIST) * REPEL_FORCE; n.vx += (mdx / mdist) * force * 8; n.vy += (mdy / mdist) * force * 8; }
+          n.vx *= 0.97; n.vy *= 0.97;
+          var spd = Math.sqrt(n.vx * n.vx + n.vy * n.vy); if (spd > 0.9) { n.vx = (n.vx / spd) * 0.9; n.vy = (n.vy / spd) * 0.9; }
+          n.x += n.vx; n.y += n.vy;
+          if (n.x < -10) n.x = W + 10; else if (n.x > W + 10) n.x = -10;
+          if (n.y < -10) n.y = H + 10; else if (n.y > H + 10) n.y = -10;
+        }
+      }
+      function loop() { requestAnimationFrame(loop); update(); draw(); }
+      window.addEventListener('resize', function () { resize(); for (var ni = 0; ni < nodes.length; ni++) { nodes[ni].x = rand(0, W); nodes[ni].y = rand(0, H); } });
+      init(); loop();
+    })();
+  </script>
+
   <script>
     (function () {
       var overlay = document.getElementById('badgeOverlay');
@@ -362,6 +464,37 @@
 
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape') closeBadge();
+      });
+    })();
+  </script>
+
+  <script>
+    (function () {
+      var overlay  = document.getElementById('skillOverlay');
+      var titleEl  = document.getElementById('skillModalTitle');
+      var descEl   = document.getElementById('skillModalDesc');
+      var closeBtn = document.getElementById('skillClose');
+
+      function openSkill(e) {
+        var btn = e.currentTarget;
+        titleEl.textContent = btn.dataset.title;
+        descEl.textContent  = btn.dataset.desc;
+        overlay.classList.add('open');
+        closeBtn.focus();
+      }
+
+      function closeSkill() { overlay.classList.remove('open'); }
+
+      document.querySelectorAll('.skill-tag').forEach(function (btn) {
+        btn.addEventListener('click', openSkill);
+      });
+
+      closeBtn.addEventListener('click', closeSkill);
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) closeSkill();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeSkill();
       });
     })();
   </script>
