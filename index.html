@@ -178,6 +178,21 @@
     .project-title { margin: 0; font-size: 1.06rem; color: var(--blue-dark); text-decoration: underline; text-underline-offset: 3px; }
     .project-card:hover .project-title { color: var(--blue); }
     .project-subtitle { margin: 0; color: var(--muted); font-size: .88rem; }
+    /* ── Coming soon card ───────────────────────────────────────────── */
+    .project-card.coming-soon { cursor: default; }
+    .project-card.coming-soon:hover { box-shadow: 0 12px 30px rgba(23,32,51,.06); transform: none; }
+    .project-card.coming-soon .project-title { text-decoration: none; color: var(--ink); }
+    .project-thumb-placeholder {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: #fff;
+    }
+    .project-thumb-placeholder svg { width: 100%; height: 100%; display: block; }
+    .coming-soon-badge {
+      display: inline-block; padding: 4px 12px; border-radius: 999px;
+      background: #fff3cd; color: #92680a; font-size: .76rem; font-weight: 800;
+      letter-spacing: .07em; text-transform: uppercase; border: 1px solid #f5d97a;
+    }
     /* ── Project modal ──────────────────────────────────────────────── */
     .project-overlay {
       display: none; position: fixed; inset: 0; z-index: 1000;
@@ -400,7 +415,10 @@
           <h3 class="project-modal-title" id="projectModalTitle"></h3>
           <p class="project-modal-desc" id="projectModalDesc"></p>
         </div>
-        <button class="project-modal-close" id="projectClose" aria-label="Close">&times;</button>
+        <div style="display:flex;align-items:center;gap:10px;flex-shrink:0;">
+          <a class="project-modal-link" id="projectModalLinkTop" href="" target="_blank" rel="noopener noreferrer">Visit site →</a>
+          <button class="project-modal-close" id="projectClose" aria-label="Close">&times;</button>
+        </div>
       </div>
       <div class="project-modal-preview">
         <iframe id="projectModalIframe" src="" title="Project preview" sandbox="allow-scripts allow-same-origin"></iframe>
@@ -552,6 +570,69 @@
             <div class="project-body">
               <h3 class="project-title">NeighborNet</h3>
               <p class="project-subtitle">Community app website · GitHub Pages</p>
+            </div>
+          </article>
+
+          <article class="project-card"
+            data-title="MoneyPilot"
+            data-desc="A personal finance web app that helps you track income, expenses, and savings goals. Built and published on GitHub Pages."
+            data-url="https://jadewebsite.github.io/moneypilot/index.html"
+            data-tags="HTML,CSS,JavaScript,GitHub Pages"
+            data-iframe="https://jadewebsite.github.io/moneypilot/index.html">
+            <div class="project-thumb">
+              <iframe src="https://jadewebsite.github.io/moneypilot/index.html" title="MoneyPilot preview" loading="lazy" sandbox="allow-scripts allow-same-origin" tabindex="-1"></iframe>
+              <div class="project-thumb-overlay"><span>View site</span></div>
+            </div>
+            <div class="project-body">
+              <h3 class="project-title">MoneyPilot</h3>
+              <p class="project-subtitle">Personal finance app · GitHub Pages</p>
+            </div>
+          </article>
+
+          <article class="project-card coming-soon">
+            <div class="project-thumb">
+              <div class="project-thumb-placeholder">
+                <!-- Man working at desk SVG illustration -->
+                <!-- Work In Progress sign SVG -->
+                <svg viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg" aria-label="Work In Progress" preserveAspectRatio="xMidYMid meet">
+                  <!-- outer border / shadow -->
+                  <rect x="4" y="4" width="392" height="272" rx="22" fill="#1a1a1a" opacity=".18"/>
+                  <!-- black border ring -->
+                  <rect x="0" y="0" width="392" height="272" rx="20" fill="#111"/>
+                  <!-- yellow fill -->
+                  <rect x="8" y="8" width="376" height="256" rx="15" fill="#FFC200"/>
+                  <!-- hazard stripe bar at bottom -->
+                  <clipPath id="stripeClip">
+                    <rect x="8" y="220" width="376" height="36" rx="0"/>
+                  </clipPath>
+                  <rect x="8" y="220" width="376" height="36" fill="#111" clip-path="url(#stripeClip)"/>
+                  <!-- yellow diagonal stripes over the black bar -->
+                  <g clip-path="url(#stripeClip)">
+                    <rect x="-10" y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 20 238)"/>
+                    <rect x="30"  y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 60 238)"/>
+                    <rect x="70"  y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 100 238)"/>
+                    <rect x="110" y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 140 238)"/>
+                    <rect x="150" y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 180 238)"/>
+                    <rect x="190" y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 220 238)"/>
+                    <rect x="230" y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 260 238)"/>
+                    <rect x="270" y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 300 238)"/>
+                    <rect x="310" y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 340 238)"/>
+                    <rect x="350" y="210" width="30" height="60" fill="#FFC200" transform="rotate(-45 380 238)"/>
+                  </g>
+                  <!-- rounded corners clip for bottom stripe -->
+                  <rect x="8" y="248" width="376" height="16" rx="0" fill="#FFC200"/>
+                  <rect x="8" y="248" width="376" height="16" rx="15" fill="#FFC200"/>
+                  <!-- WORK IN text -->
+                  <text x="196" y="130" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-size="72" fill="#111" letter-spacing="-2">WORK IN</text>
+                  <!-- PROGRESS text -->
+                  <text x="196" y="210" text-anchor="middle" font-family="Arial Black, Impact, sans-serif" font-weight="900" font-size="72" fill="#111" letter-spacing="-2">PROGRESS</text>
+                </svg>
+              </div>
+            </div>
+            <div class="project-body">
+              <h3 class="project-title">New Project</h3>
+              <p class="project-subtitle">Work in progress · Stay tuned</p>
+              <p style="margin:8px 0 0;color:var(--muted);font-size:.85rem;line-height:1.5;">This project is currently ongoing. Details and a live link will be available once it's ready.</p>
             </div>
           </article>
 
@@ -736,14 +817,16 @@
       var descEl    = document.getElementById('projectModalDesc');
       var iframeEl  = document.getElementById('projectModalIframe');
       var tagsEl    = document.getElementById('projectModalTags');
-      var linkEl    = document.getElementById('projectModalLink');
-      var closeBtn  = document.getElementById('projectClose');
+      var linkEl       = document.getElementById('projectModalLink');
+      var linkTopEl    = document.getElementById('projectModalLinkTop');
+      var closeBtn     = document.getElementById('projectClose');
 
       function openProject(card) {
-        titleEl.textContent = card.dataset.title;
-        descEl.textContent  = card.dataset.desc;
-        iframeEl.src        = card.dataset.iframe;
-        linkEl.href         = card.dataset.url;
+        titleEl.textContent  = card.dataset.title;
+        descEl.textContent   = card.dataset.desc;
+        iframeEl.src         = card.dataset.iframe;
+        linkEl.href          = card.dataset.url;
+        linkTopEl.href       = card.dataset.url;
         tagsEl.innerHTML    = '';
         (card.dataset.tags || '').split(',').forEach(function (tag) {
           var span = document.createElement('span');
@@ -761,6 +844,7 @@
       }
 
       document.querySelectorAll('.project-card').forEach(function (card) {
+        if (card.classList.contains('coming-soon')) return;
         card.addEventListener('click', function () { openProject(card); });
         card.addEventListener('keydown', function (e) {
           if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openProject(card); }
